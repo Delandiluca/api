@@ -1,0 +1,27 @@
+name: book_app_api
+description: A server app using the shelf package and Docker.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.3.0-120.0.dev
+
+dependencies:
+  args: ^2.4.0
+  shelf: ^1.4.1
+  shelf_router: ^1.1.4
+  dio: ^5.3.3
+  dotenv: ^4.2.0
+  postgres: ^3.0.0
+  mysql1: ^0.20.0
+  shelf_static: ^1.1.2
+
+dev_dependencies:
+  http: ^1.1.0
+  lints: ^3.0.0
+  test: ^1.24.0
+  build_runner: ^2.0.0
+  shelf_router_generator: ^1.0.0
+
+assets:
+  - .env
