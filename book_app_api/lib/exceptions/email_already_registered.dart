@@ -1,1 +1,0 @@
-class EmailAlreadyRegistered implements Exception {}

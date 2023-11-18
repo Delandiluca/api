@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:book_app_api/dao/repositories/user_repository.dart';
-import 'package:book_app_api/exceptions/email_already_registered.dart';
+import 'package:book_app_api/exceptions/username_already_registered.dart';
 import 'package:book_app_api/exceptions/user_notfound_exception.dart';
 import 'package:book_app_api/model/User.dart';
 import 'package:shelf/shelf.dart';
@@ -15,45 +15,54 @@ class AuthController {
 
   @Route.post('/register')
   Future<Response> register(Request request) async {
+    final requestBody = await request.readAsString();
+    //print('Debug Register - Request Body: $requestBody');
+    final userRq = User.fromJson(requestBody);
+    //print('Debug Register - Request Body JSON: $userRq');
     try {
-      final userRegister = User.fromJson(await request.readAsString());
-
-      await _userRepository.save(userRegister);
+      await _userRepository.save(userRq);
 
       return Response(200, headers: {'content-type': 'application/json'});
-    } on EmailAlreadyRegistered catch (e, s) {
-      print(e);
-      print(s);
+    } on UsernameAlreadyRegistered catch (e, s) {
+      print('Debug Register - Exception: $e');
+      print('Debug Register - Stack Trace: $s');
       return Response(400,
-          body: jsonEncode({'error': 'E-mail Already exists.'}),
+          body: jsonEncode({'error': 'Username Already exists.'}),
           headers: {
             'content-type': 'application/json',
           });
     } catch (e, s) {
-      print("teste debug:");
+      //print("teste debug:");
       print(e);
       print(s);
-      return Response(500, body: 'InternalServerError');
+      return Response.internalServerError();
     }
   }
 
   @Route.post('/')
   Future<Response> login(Request request) async {
-    final user = User.fromJson(await request.readAsString());
+    final requestBody = await request.readAsString();
+    final jsonRQ = jsonDecode(requestBody);
+
     try {
+      print('Debug Login - Request Body: $requestBody');
+      print('Debug Login - Request Body JSONDECODE: $jsonRQ');
+      final user =
+          await _userRepository.login(jsonRQ['username'], jsonRQ['password']);
+
       return Response(200, body: jsonEncode(user), headers: {
         'content-type': 'application/json',
       });
     } on UserNotFoundException catch (e, s) {
       print(e);
       print(s);
-      return Response(403, headers: {
+      return Response(403, body: 'User not found', headers: {
         'content-type': 'application/json',
       });
     } catch (e, s) {
       print(e);
       print(s);
-      return Response(500, body: 'InternalServerError');
+      return Response.internalServerError();
     }
   }
 

@@ -1,16 +1,18 @@
 import 'package:book_app_api/dao/dao_entity.dart';
 
 class Note implements DaoEntity {
-  int code;
+  int? code;
   int value;
   String? description;
-  String codeUser;
-  String codeBook;
+  String createdAt;
+  int? codeUser;
+  int? codeBook;
 
   Note({
     required this.code,
     required this.value,
     required this.description,
+    required this.createdAt,
     required this.codeUser,
     required this.codeBook,
   });
@@ -20,8 +22,9 @@ class Note implements DaoEntity {
           code: DaoEntity.idInvalid,
           value: 0,
           description: '',
-          codeUser: '',
-          codeBook: '',
+          createdAt: DaoEntity.dateInvalid,
+          codeUser: DaoEntity.idInvalid,
+          codeBook: DaoEntity.idInvalid,
         );
 
   Note.fromMap(Map<String, Object?> map)
@@ -29,20 +32,22 @@ class Note implements DaoEntity {
           code: map['code'] as int,
           value: map['value'] as int,
           description: map['description'] as String?,
-          codeUser: map['user'] as String,
-          codeBook: map['book'] as String,
+          createdAt: map['createdAt'] as String,
+          codeUser: map['user'] as int?,
+          codeBook: map['book'] as int?,
         );
 
   @override
-  int get id => code;
+  int get id => code!;
 
   @override
   void fromMap(Map<String, Object?> map) {
     code = map['code'] as int;
     value = map['value'] as int;
     description = map['description'] as String?;
-    codeUser = map['user'] as String;
-    codeBook = map['book'] as String;
+    createdAt = map['createdAt'] as String;
+    codeUser = map['user'] as int?;
+    codeBook = map['book'] as int?;
   }
 
   @override
@@ -51,6 +56,7 @@ class Note implements DaoEntity {
       'code': code,
       'value': value,
       'description': description,
+      'createdAt': createdAt,
       'user': codeUser,
       'book': codeBook,
     };

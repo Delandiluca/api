@@ -3,16 +3,18 @@ import 'dart:convert';
 import 'package:book_app_api/dao/dao_entity.dart';
 
 class User implements DaoEntity {
-  int code;
-  String? name;
-  String? username;
-  String? password;
+  int? code;
+  String name;
+  String username;
+  String password;
+  String createdAt;
 
   User({
     required this.code,
-    required name,
-    required username,
-    required password,
+    required this.name,
+    required this.username,
+    required this.password,
+    required this.createdAt,
   });
 
   User.empty()
@@ -21,40 +23,44 @@ class User implements DaoEntity {
           name: '',
           username: '',
           password: '',
+          createdAt: DaoEntity.dateInvalid,
         );
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       code: map['code'] as int? ?? DaoEntity.idInvalid,
-      name: map['name'],
-      username: map['username'],
-      password: map['password'],
+      name: map['name'] ?? '',
+      username: map['username'] ?? '',
+      password: map['password'] ?? '',
+      createdAt: map['createdAt'] ?? '',
     );
   }
 
   @override
+  int get id => code!;
+
+  @override
   void fromMap(Map<String, Object?> map) {
     code = map['code'] as int;
-    name = map['name'] as String?;
-    username = map['username'] as String?;
-    password = map['password'] as String?;
+    name = map['name'] as String;
+    username = map['username'] as String;
+    password = map['password'] as String;
+    createdAt = map['createdAt'] as String;
+    //print(
+    //'Debug fromMap - code: $code, name: $name, username: $username, password: $password, createdAt: $createdAt');
   }
 
   @override
-  Map<String, Object?> toMap() {
-    var map = <String, Object?>{
+  Map<String, dynamic> toMap() {
+    return {
       'code': code,
       'name': name,
       'username': username,
       'password': password,
+      'createdAt': createdAt,
     };
-    return map;
   }
 
-  String toJson() => jsonEncode(toMap());
-  factory User.fromJson(String json) => User.fromMap(jsonDecode(json));
-
-  @override
-  // TODO: implement id
-  int get id => code;
+  String toJson() => json.encode(toMap());
+  factory User.fromJson(String source) => User.fromMap(json.decode(source));
 }

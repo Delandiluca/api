@@ -1,31 +1,35 @@
 import 'package:book_app_api/dao/dao.dart';
 import 'package:book_app_api/dao/database.dart';
 import 'package:book_app_api/dao/helpers/cripty_helper.dart';
-import 'package:book_app_api/exceptions/email_already_registered.dart';
+import 'package:book_app_api/exceptions/username_already_registered.dart';
 import 'package:book_app_api/exceptions/user_notfound_exception.dart';
 import 'package:book_app_api/model/User.dart';
-import 'package:mysql1/mysql1.dart';
+import 'package:postgres/legacy.dart';
+import 'package:postgres/postgres.dart';
 
 class UserRepository implements Dao<User> {
   Future<bool> login(String username, String password) async {
-    MySqlConnection? conn;
+    Connection? conn;
     try {
       conn = await Database().openConnection();
-      final result = await conn.query('''
-        SELECT * FROM users
-        WHERE username = ? 
-        AND password = ?
-      ''', [
-        username,
-        CriptyHelper.generatedSha256Hash(password),
-      ]);
+      final result = await conn.execute(
+        Sql.named(
+            'SELECT * FROM users WHERE username=@username AND password=@password'),
+        parameters: {
+          'username': username,
+          'password': CriptyHelper.generatedSha256Hash(password),
+        },
+      );
 
-      if (result.isEmpty) {
+      if (result.isNotEmpty) {
+        final userData = result.first;
+        print('DEBUG USER FIRST: $userData');
+      } else {
         throw UserNotFoundException();
       }
 
       return true;
-    } on Exception catch (e, s) {
+    } on PostgreSQLException catch (e, s) {
       print(e);
       print(s);
       throw Exception('Erro ao realizar Login');
@@ -36,28 +40,33 @@ class UserRepository implements Dao<User> {
 
   @override
   Future<bool> save(User user) async {
-    MySqlConnection? conn;
+    Connection? conn;
     try {
       conn = await Database().openConnection();
 
-      final isUserRegister = await conn
-          .query('select * from users where username = ?', [user.username]);
+      final isUserRegister = await conn.execute(
+        Sql.named('SELECT * FROM users WHERE username=@username'),
+        parameters: {
+          'username': user.username,
+        },
+      );
 
       if (isUserRegister.isEmpty) {
-        await conn.query('''
-          INSERT INTO users
-          values(?, ?, ?, ?)
-        ''', [
-          null,
-          user.name,
-          user.username,
-          CriptyHelper.generatedSha256Hash(user.password),
-        ]);
+        await conn.execute(
+          Sql.named(
+              'INSERT INTO users (name, username, password, createdAt) VALUES (@name, @username, @password, @date)'),
+          parameters: {
+            'name': user.name,
+            'username': user.username,
+            'password': CriptyHelper.generatedSha256Hash(user.password),
+            'date': DateTime.now().toString(),
+          },
+        );
         return true;
       } else {
-        throw EmailAlreadyRegistered();
+        throw UsernameAlreadyRegistered();
       }
-    } on MySqlException catch (e, s) {
+    } on PostgreSQLException catch (e, s) {
       print(e);
       print(s);
       throw Exception();

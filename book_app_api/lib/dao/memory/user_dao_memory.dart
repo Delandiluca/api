@@ -8,12 +8,14 @@ class BookDaoMemory implements Dao<User> {
       name: 'Delandi Lucas',
       username: 'delandilucas',
       password: 'admin',
+      createdAt: DateTime.now().toString(),
     ),
     User(
       code: 2,
       name: 'Agda Silva',
       username: 'agda',
       password: 'admin',
+      createdAt: DateTime.now().toString(),
     ),
   ];
 
