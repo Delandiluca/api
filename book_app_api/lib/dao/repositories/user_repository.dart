@@ -8,7 +8,7 @@ import 'package:postgres/legacy.dart';
 import 'package:postgres/postgres.dart';
 
 class UserRepository implements Dao<User> {
-  Future<bool> login(String username, String password) async {
+  Future<User?> login(String username, String password) async {
     Connection? conn;
     try {
       conn = await Database().openConnection();
@@ -28,7 +28,7 @@ class UserRepository implements Dao<User> {
         throw UserNotFoundException();
       }
 
-      return true;
+      return User.fromMap(result.first.toColumnMap());
     } on PostgreSQLException catch (e, s) {
       print(e);
       print(s);
@@ -82,7 +82,7 @@ class UserRepository implements Dao<User> {
   }
 
   @override
-  Future<bool> delete(User user) async {
+  Future<bool> delete(int id) async {
     //TODO: implement delete
     return false;
   }
@@ -95,7 +95,25 @@ class UserRepository implements Dao<User> {
 
   @override
   Future<User?> findById(int id) async {
-    //TODO: implement findById
-    return null;
+    Connection? conn;
+    try {
+      conn = await Database().openConnection();
+      final result = await conn.execute(
+          Sql.named('SELECT * FROM users WHERE code=@code'),
+          parameters: {
+            'code': id,
+          });
+      if (result.isNotEmpty) {
+        return User.fromMap(result.first.toColumnMap());
+      } else {
+        throw UserNotFoundException();
+      }
+    } on PostgreSQLException catch (e, s) {
+      print(e);
+      print(s);
+      throw Exception('Error at FindById Book');
+    } finally {
+      await conn?.close();
+    }
   }
 }

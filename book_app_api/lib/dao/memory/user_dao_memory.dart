@@ -52,9 +52,9 @@ class BookDaoMemory implements Dao<User> {
   }
 
   @override
-  Future<bool> delete(User entity) async {
+  Future<bool> delete(int id) async {
     for (int i = 0; i < listUsers.length; i++) {
-      if (listUsers[i].code == entity.code) {
+      if (listUsers[i].code == id) {
         listUsers.removeAt(i);
         return true;
       }

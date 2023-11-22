@@ -1,0 +1,1 @@
+class NoteNotFoundException implements Exception {}

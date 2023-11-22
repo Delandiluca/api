@@ -4,10 +4,10 @@ import 'package:book_app_api/dao/dao_entity.dart';
 
 class User implements DaoEntity {
   int? code;
-  String name;
-  String username;
-  String password;
-  String createdAt;
+  String? name;
+  String? username;
+  String? password;
+  String? createdAt;
 
   User({
     required this.code,
@@ -32,7 +32,7 @@ class User implements DaoEntity {
       name: map['name'] ?? '',
       username: map['username'] ?? '',
       password: map['password'] ?? '',
-      createdAt: map['createdAt'] ?? '',
+      createdAt: map['createdat'] ?? '',
     );
   }
 
@@ -45,7 +45,7 @@ class User implements DaoEntity {
     name = map['name'] as String;
     username = map['username'] as String;
     password = map['password'] as String;
-    createdAt = map['createdAt'] as String;
+    createdAt = map['createdat'] as String;
     //print(
     //'Debug fromMap - code: $code, name: $name, username: $username, password: $password, createdAt: $createdAt');
   }
@@ -59,6 +59,11 @@ class User implements DaoEntity {
       'password': password,
       'createdAt': createdAt,
     };
+  }
+
+  Map<String, dynamic> toMapWithoutNulls() {
+    final map = toMap();
+    return map..removeWhere((key, value) => value == null);
   }
 
   String toJson() => json.encode(toMap());

@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:book_app_api/dao/dao_entity.dart';
 
 class Note implements DaoEntity {
   int? code;
-  int value;
+  int? value;
   String? description;
-  String createdAt;
+  String? createdAt;
   int? codeUser;
   int? codeBook;
 
@@ -27,39 +29,47 @@ class Note implements DaoEntity {
           codeBook: DaoEntity.idInvalid,
         );
 
-  Note.fromMap(Map<String, Object?> map)
-      : this(
-          code: map['code'] as int,
-          value: map['value'] as int,
-          description: map['description'] as String?,
-          createdAt: map['createdAt'] as String,
-          codeUser: map['user'] as int?,
-          codeBook: map['book'] as int?,
-        );
+  factory Note.fromMap(Map<String, dynamic> map) {
+    return Note(
+      code: map['code'] as int? ?? DaoEntity.idInvalid,
+      value: map['value'] as int?,
+      description: map['description'] as String?,
+      createdAt: map['createdat'] as String?,
+      codeUser: map['codeuser'] as int?,
+      codeBook: map['codebook'] as int?,
+    );
+  }
 
   @override
   int get id => code!;
 
   @override
   void fromMap(Map<String, Object?> map) {
-    code = map['code'] as int;
-    value = map['value'] as int;
+    code = map['code'] as int?;
+    value = map['value'] as int?;
     description = map['description'] as String?;
-    createdAt = map['createdAt'] as String;
-    codeUser = map['user'] as int?;
-    codeBook = map['book'] as int?;
+    createdAt = map['createdat'] as String?;
+    codeUser = map['codeuser'] as int?;
+    codeBook = map['codebook'] as int?;
   }
 
   @override
-  Map<String, Object?> toMap() {
-    var map = <String, Object?>{
+  Map<String, dynamic> toMap() {
+    return {
       'code': code,
       'value': value,
       'description': description,
       'createdAt': createdAt,
-      'user': codeUser,
-      'book': codeBook,
+      'codeuser': codeUser,
+      'codebook': codeBook,
     };
-    return map;
   }
+
+  Map<String, dynamic> toMapWithoutNulls() {
+    final map = toMap();
+    return map..removeWhere((key, value) => value == null);
+  }
+
+  String toJson() => json.encode(toMap());
+  factory Note.fromJson(String source) => Note.fromMap(json.decode(source));
 }

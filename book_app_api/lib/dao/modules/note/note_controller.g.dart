@@ -1,17 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'book_controller.dart';
+part of 'note_controller.dart';
 
 // **************************************************************************
 // ShelfRouterGenerator
 // **************************************************************************
 
-Router _$BookControllerRouter(BookController service) {
+Router _$NoteControllerRouter(NoteController service) {
   final router = Router();
   router.add(
     'POST',
     r'/register',
-    service.register,
+    service.saveNote,
   );
   router.add(
     'GET',
@@ -21,22 +21,27 @@ Router _$BookControllerRouter(BookController service) {
   router.add(
     'GET',
     r'/',
-    service.findAllBooks,
+    service.findAllNotes,
   );
   router.add(
     'DELETE',
     r'/<code>',
-    service.deleteBook,
+    service.deleteNote,
   );
   router.add(
     'PUT',
     r'/<code>',
-    service.updateBook,
+    service.updateNote,
   );
   router.add(
     'GET',
-    r'/findAllBooksByUser/<code>',
-    service.findAllBooksByUser,
+    r'/findAllNotesByUser/<code>',
+    service.findAllNotesByUser,
+  );
+  router.add(
+    'GET',
+    r'/findAllNotesByBook/<code>',
+    service.findAllNotesByBook,
   );
   return router;
 }
