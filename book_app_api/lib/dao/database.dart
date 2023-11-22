@@ -21,7 +21,7 @@ class Database {
           username: username,
           password: password,
         ),
-        settings: ConnectionSettings(sslMode: SslMode.disable),
+        settings: ConnectionSettings(sslMode: SslMode.require),
       );
       return conn;
     } catch (e, s) {
