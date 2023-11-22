@@ -32,7 +32,7 @@ class UserRepository implements Dao<User> {
     } on PostgreSQLException catch (e, s) {
       print(e);
       print(s);
-      throw Exception('Erro ao realizar Login');
+      throw Exception('Error at Login');
     } finally {
       await conn?.close();
     }

@@ -1,0 +1,1 @@
+class BookAlreadyRegistered implements Exception {}

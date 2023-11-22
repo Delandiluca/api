@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:book_app_api/dao/dao_entity.dart';
 
 class Book implements DaoEntity {
@@ -36,18 +38,19 @@ class Book implements DaoEntity {
           codeUser: DaoEntity.idInvalid,
         );
 
-  Book.fromMap(Map<String, Object?> map)
-      : this(
-          code: map['code'] as int,
-          title: map['title'] as String?,
-          author: map['author'] as String?,
-          gender: map['gender'] as String?,
-          createdAt: map['createdAt'] as String?,
-          imageUrl: map['imageUrl'] as String?,
-          sinopse: map['sinopse'] as String?,
-          linkReference: map['linkReference'] as String?,
-          codeUser: map['codeUser'] as int,
-        );
+  factory Book.fromMap(Map<String, dynamic> map) {
+    return Book(
+      code: map['code'] as int? ?? DaoEntity.idInvalid,
+      title: map['title'] as String?,
+      author: map['author'] as String?,
+      gender: map['gender'] as String?,
+      createdAt: map['createdat'] as String?,
+      imageUrl: map['imageurl'] as String?,
+      sinopse: map['sinopse'] as String?,
+      linkReference: map['linkreference'] as String?,
+      codeUser: map['codeuser'] as int?,
+    );
+  }
 
   @override
   void fromMap(Map<String, Object?> map) {
@@ -55,19 +58,19 @@ class Book implements DaoEntity {
     title = map['title'] as String?;
     author = map['author'] as String?;
     gender = map['gender'] as String?;
-    createdAt = map['createdAt'] as String?;
-    imageUrl = map['imageUrl'] as String?;
+    createdAt = map['createdat'] as String?;
+    imageUrl = map['imageurl'] as String?;
     sinopse = map['sinopse'] as String?;
-    linkReference = map['linkReference'] as String?;
-    codeUser = map['codeUser'] as int;
+    linkReference = map['linkreference'] as String?;
+    codeUser = map['codeuser'] as int;
   }
 
   @override
   int get id => code!;
 
   @override
-  Map<String, Object?> toMap() {
-    var map = <String, Object?>{
+  Map<String, dynamic> toMap() {
+    return {
       'code': code,
       'title': title,
       'author': author,
@@ -78,6 +81,13 @@ class Book implements DaoEntity {
       'linkReference': linkReference,
       'codeUser': codeUser,
     };
-    return map;
   }
+
+  Map<String, dynamic> toMapWithoutNulls() {
+    final map = toMap();
+    return map..removeWhere((key, value) => value == null);
+  }
+
+  String toJson() => json.encode(toMap());
+  factory Book.fromJson(String source) => Book.fromMap(json.decode(source));
 }
