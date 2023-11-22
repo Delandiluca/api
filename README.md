@@ -10,5 +10,5 @@ Caminhe até /api/book_app_api
 
 Está utilizando uma RDS AWS para o banco de dados....
 
-URL: 'http//:localhost:8080/'
+URL: 'http://localhost:8080/'
 
