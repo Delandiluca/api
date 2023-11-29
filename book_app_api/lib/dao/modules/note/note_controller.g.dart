@@ -35,12 +35,12 @@ Router _$NoteControllerRouter(NoteController service) {
   );
   router.add(
     'GET',
-    r'/findAllNotesByUser/<code>',
+    r'/user/<code>',
     service.findAllNotesByUser,
   );
   router.add(
     'GET',
-    r'/findAllNotesByBook/<code>',
+    r'/book/<code>',
     service.findAllNotesByBook,
   );
   return router;

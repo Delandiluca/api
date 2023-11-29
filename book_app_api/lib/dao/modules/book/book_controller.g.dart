@@ -35,7 +35,7 @@ Router _$BookControllerRouter(BookController service) {
   );
   router.add(
     'GET',
-    r'/findAllBooksByUser/<code>',
+    r'/user/<code>',
     service.findAllBooksByUser,
   );
   return router;

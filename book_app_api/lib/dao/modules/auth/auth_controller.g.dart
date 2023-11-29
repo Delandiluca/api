@@ -18,5 +18,10 @@ Router _$AuthControllerRouter(AuthController service) {
     r'/',
     service.login,
   );
+  router.add(
+    'GET',
+    r'/<code>',
+    service.findById,
+  );
   return router;
 }

@@ -129,7 +129,7 @@ class BookController {
     }
   }
 
-  @Route.get('/findAllBooksByUser/<code>')
+  @Route.get('/user/<code>')
   Future<Response> findAllBooksByUser(Request request, String code) async {
     final int codeUser = int.parse(code);
     try {

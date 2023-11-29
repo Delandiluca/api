@@ -7,13 +7,10 @@ environment:
   sdk: ^3.2.0
 
 dependencies:
-  args: ^2.4.0
   shelf: ^1.4.1
   shelf_router: ^1.1.4
-  dio: ^5.3.3
   dotenv: ^4.2.0
   postgres: ^3.0.0
-  mysql1: ^0.20.0
   shelf_static: ^1.1.2
 
 dev_dependencies:

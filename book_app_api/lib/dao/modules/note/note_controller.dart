@@ -129,7 +129,7 @@ class NoteController {
     }
   }
 
-  @Route.get('/findAllNotesByUser/<code>')
+  @Route.get('/user/<code>')
   Future<Response> findAllNotesByUser(Request request, String code) async {
     final int codeUser = int.parse(code);
     try {
@@ -155,11 +155,11 @@ class NoteController {
     }
   }
 
-  @Route.get('/findAllNotesByBook/<code>')
+  @Route.get('/book/<code>')
   Future<Response> findAllNotesByBook(Request request, String code) async {
     final int codeBook = int.parse(code);
     try {
-      final existingBook = await _userRepository.findById(codeBook);
+      final existingBook = await _bookRepository.findById(codeBook);
       if (existingBook == null) {
         return Response.notFound('Book Not Found');
       }
@@ -170,6 +170,10 @@ class NoteController {
       return Response(200, body: jsonEncode(notesWithoutNulls), headers: {
         'content-type': 'application/json',
       });
+    } on BookNotFoundException catch (e, s) {
+      print(e);
+      print(s);
+      return Response.notFound('Book Not Found');
     } on NoteNotFoundException catch (e, s) {
       print(e);
       print(s);

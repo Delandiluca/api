@@ -66,5 +66,26 @@ class AuthController {
     }
   }
 
+  @Route.get('/<code>')
+  Future<Response> findById(Request request, String code) async {
+    final int codeUser = int.parse(code);
+    try {
+      final user = await _userRepository.findById(codeUser);
+      return Response(200,
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: jsonEncode(user?.toMapWithoutNulls()));
+    } on UserNotFoundException catch (e, s) {
+      print(e);
+      print(s);
+      return Response.notFound('User not found');
+    } catch (e, s) {
+      print(e);
+      print(s);
+      return Response.internalServerError();
+    }
+  }
+
   Router get router => _$AuthControllerRouter(this);
 }

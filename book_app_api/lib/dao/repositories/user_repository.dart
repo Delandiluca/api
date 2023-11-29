@@ -89,8 +89,26 @@ class UserRepository implements Dao<User> {
 
   @override
   Future<List<User>> findAll() async {
-    //TODO: implement findAll
-    return [];
+    Connection? conn;
+    try {
+      conn = await Database().openConnection();
+
+      final result = await conn.execute(
+        Sql.named('SELECT * FROM users'),
+      );
+
+      if (result.isEmpty) {
+        throw UserNotFoundException();
+      }
+
+      return result.map((row) => User.fromMap(row.toColumnMap())).toList();
+    } on PostgreSQLException catch (e, s) {
+      print(e);
+      print(s);
+      throw Exception('Error at FindAll Users');
+    } finally {
+      await conn?.close();
+    }
   }
 
   @override
@@ -111,7 +129,7 @@ class UserRepository implements Dao<User> {
     } on PostgreSQLException catch (e, s) {
       print(e);
       print(s);
-      throw Exception('Error at FindById Book');
+      throw Exception('Error at FindById User');
     } finally {
       await conn?.close();
     }

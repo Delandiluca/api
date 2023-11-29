@@ -1,3 +1,0 @@
-class DatabaseHelper {
-  //TODO Implement
-}
