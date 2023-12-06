@@ -15,13 +15,23 @@ Router _$AuthControllerRouter(AuthController service) {
   );
   router.add(
     'POST',
-    r'/',
+    r'/login',
     service.login,
   );
   router.add(
     'GET',
     r'/<code>',
     service.findById,
+  );
+  router.add(
+    'GET',
+    r'/',
+    service.findAll,
+  );
+  router.add(
+    'DELETE',
+    r'/<code>',
+    service.deleteUser,
   );
   return router;
 }

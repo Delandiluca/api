@@ -83,8 +83,24 @@ class UserRepository implements Dao<User> {
 
   @override
   Future<bool> delete(int id) async {
-    //TODO: implement delete
-    return false;
+    Connection? conn;
+    try {
+      conn = await Database().openConnection();
+
+      await conn.execute(
+        Sql.named('DELETE FROM users WHERE code=@code'),
+        parameters: {
+          'code': id,
+        },
+      );
+      return true;
+    } on PostgreSQLException catch (e, s) {
+      print(e);
+      print(s);
+      throw Exception('Error at Delete Book');
+    } finally {
+      await conn?.close();
+    }
   }
 
   @override

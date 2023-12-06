@@ -39,7 +39,7 @@ class AuthController {
     }
   }
 
-  @Route.post('/')
+  @Route.post('/login')
   Future<Response> login(Request request) async {
     final requestBody = await request.readAsString();
     final jsonRQ = jsonDecode(requestBody);
@@ -50,9 +50,11 @@ class AuthController {
       final user =
           await _userRepository.login(jsonRQ['username'], jsonRQ['password']);
 
-      return Response(200, body: jsonEncode(user), headers: {
-        'content-type': 'application/json',
-      });
+      return Response(200,
+          body: jsonEncode(user?.toMapWithoutNulls()),
+          headers: {
+            'content-type': 'application/json',
+          });
     } on UserNotFoundException catch (e, s) {
       print(e);
       print(s);
@@ -80,6 +82,49 @@ class AuthController {
       print(e);
       print(s);
       return Response.notFound('User not found');
+    } catch (e, s) {
+      print(e);
+      print(s);
+      return Response.internalServerError();
+    }
+  }
+
+  @Route.get('/')
+  Future<Response> findAll(Request request) async {
+    try {
+      final allusers = await _userRepository.findAll();
+      final usersWithoutNulls =
+          allusers.map((allusers) => allusers.toMapWithoutNulls()).toList();
+      return Response(200,
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: jsonEncode(usersWithoutNulls));
+    } on UserNotFoundException catch (e, s) {
+      print(e);
+      print(s);
+      return Response.notFound('User not found');
+    } catch (e, s) {
+      print(e);
+      print(s);
+      return Response.internalServerError();
+    }
+  }
+
+  @Route.delete('/<code>')
+  Future<Response> deleteUser(Request request, String code) async {
+    final int codeUser = int.parse(code);
+    try {
+      final existingUser = await _userRepository.findById(codeUser);
+      if (existingUser == null) {
+        throw UserNotFoundException();
+      }
+      await _userRepository.delete(codeUser);
+      return Response.ok('User Deleted!');
+    } on UserNotFoundException catch (e, s) {
+      print(e);
+      print(s);
+      return Response.notFound('User Not Found');
     } catch (e, s) {
       print(e);
       print(s);
