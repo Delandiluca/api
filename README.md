@@ -33,9 +33,7 @@
                 "title": "testando",
                 "author": "book.testando",
                 "gender": "book.testando",
-                "imageurl": "book.testando",
                 "sinopse": "book.testando",
-                "linkreference": "book.testando",
                 "codeuser": 2
             }
 
@@ -53,9 +51,7 @@
                 "author": "book.testando",
                 "gender": "book.testando",
                 "createdat": "2023-11-22 01:54:48.126563",
-                "imageurl": "book.testando",
                 "sinopse": "book.testando",
-                "linkreference": "book.testando",
                 "codeuser": 2
             }
 

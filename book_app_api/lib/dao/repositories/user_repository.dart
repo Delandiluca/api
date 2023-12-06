@@ -3,7 +3,7 @@ import 'package:book_app_api/dao/database.dart';
 import 'package:book_app_api/dao/helpers/cripty_helper.dart';
 import 'package:book_app_api/exceptions/username_already_registered.dart';
 import 'package:book_app_api/exceptions/user_notfound_exception.dart';
-import 'package:book_app_api/model/User.dart';
+import 'package:book_app_api/model/user.dart';
 import 'package:postgres/legacy.dart';
 import 'package:postgres/postgres.dart';
 

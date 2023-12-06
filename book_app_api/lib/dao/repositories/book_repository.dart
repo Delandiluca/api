@@ -15,18 +15,18 @@ class BookRepository implements Dao<Book> {
       await conn.execute(
         Sql.named('''
                 INSERT INTO 
-                books (title, author, gender, createdAt, imageUrl, sinopse, linkReference, codeUser) 
+                books (title, author, gender, createdAt, sinopse, codeUser) 
                 VALUES 
-                (@title, @author, @gender, @createdAt, @imageUrl, @sinopse, @linkReference, @codeUser)
+                (@title, @author, @gender, @createdAt, @sinopse, @codeUser)
                 '''),
         parameters: {
           'title': book.title,
           'author': book.author,
           'gender': book.gender,
           'createdAt': DateTime.now().toString(),
-          'imageUrl': book.imageUrl,
+          //'imageUrl': book.imageUrl,
           'sinopse': book.sinopse,
-          'linkReference': book.linkReference,
+          //'linkReference': book.linkReference,
           'codeUser': book.codeUser,
         },
       );
@@ -124,9 +124,7 @@ class BookRepository implements Dao<Book> {
             author = @author,
             gender = @gender,
             createdAt = @createdAt,
-            imageUrl = @imageUrl,
             sinopse = @sinopse,
-            linkReference = @linkReference,
             codeUser = @codeUser
           WHERE code = @code
       '''),
@@ -136,9 +134,9 @@ class BookRepository implements Dao<Book> {
           'author': entity.author,
           'gender': entity.gender,
           'createdAt': entity.createdAt,
-          'imageUrl': entity.imageUrl,
+          //'imageUrl': entity.imageUrl,
           'sinopse': entity.sinopse,
-          'linkReference': entity.linkReference,
+          //'linkReference': entity.linkReference,
           'codeUser': entity.codeUser,
         },
       );

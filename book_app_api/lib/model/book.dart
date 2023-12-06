@@ -19,9 +19,9 @@ class Book implements DaoEntity {
     this.author,
     this.gender,
     this.createdAt,
-    this.imageUrl,
+    //this.imageUrl,
     this.sinopse,
-    this.linkReference,
+    //this.linkReference,
     required this.codeUser,
   });
 
@@ -32,9 +32,9 @@ class Book implements DaoEntity {
           author: '',
           gender: '',
           createdAt: DaoEntity.dateInvalid,
-          imageUrl: '',
+          //imageUrl: '',
           sinopse: '',
-          linkReference: '',
+          //linkReference: '',
           codeUser: DaoEntity.idInvalid,
         );
 
@@ -45,9 +45,9 @@ class Book implements DaoEntity {
       author: map['author'] as String?,
       gender: map['gender'] as String?,
       createdAt: map['createdat'] as String?,
-      imageUrl: map['imageurl'] as String?,
+      //imageUrl: map['imageurl'] as String?,
       sinopse: map['sinopse'] as String?,
-      linkReference: map['linkreference'] as String?,
+      //linkReference: map['linkreference'] as String?,
       codeUser: map['codeuser'] as int?,
     );
   }
@@ -59,9 +59,9 @@ class Book implements DaoEntity {
     author = map['author'] as String?;
     gender = map['gender'] as String?;
     createdAt = map['createdat'] as String?;
-    imageUrl = map['imageurl'] as String?;
+    //imageUrl = map['imageurl'] as String?;
     sinopse = map['sinopse'] as String?;
-    linkReference = map['linkreference'] as String?;
+    //linkReference = map['linkreference'] as String?;
     codeUser = map['codeuser'] as int;
   }
 
@@ -76,9 +76,9 @@ class Book implements DaoEntity {
       'author': author,
       'gender': gender,
       'createdAt': createdAt,
-      'imageUrl': imageUrl,
+      //'imageUrl': imageUrl,
       'sinopse': sinopse,
-      'linkReference': linkReference,
+      //'linkReference': linkReference,
       'codeUser': codeUser,
     };
   }
